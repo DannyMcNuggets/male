@@ -48,6 +48,23 @@
         </v-col>
       </v-row>
 
+      <v-row v-if="topPlayers.length">
+        <v-col cols="12">
+          <v-title class="text-center">TOP3 mängijad</v-title>
+        </v-col>
+
+        // poodium
+        <v-col v-for="(player, index) in topPlayers" :key="index" cols="12" md="4">
+          <v-card outlined>
+            <v-card-title>{{ player.name }}</v-card-title>
+            <v-card-subtitle>{{ player.points }} points</v-card-subtitle>
+            <v-card-text>
+              {{ player.date }}
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+
       <v-row>
         <v-col>
           <PlayersSearchTable :club-id="clubId" />
@@ -67,7 +84,7 @@
 </template>
 
 <script>
-import {fetchClubById} from "@/wrapper/clubsApiWrapper.js";
+import {fetchClubById, fetchClubTopPlayers} from "@/wrapper/clubsApiWrapper.js";
 import PlayersSearchTable from "@/components/clubs/PlayersSearchTable.vue";
 import AddClubDialog from "@/components/clubs/AddClubDialog.vue";
 import ModifyClubForm from "@/components/clubs/ModifyClubForm.vue";
@@ -83,6 +100,7 @@ export default {
     return {
       club: null,
       clubId: null,
+      topPlayers: [],
       showModifyClubDialog: false,
     }
   },
@@ -97,6 +115,7 @@ export default {
   methods: {
     async fetchClubData() {
       this.club = await fetchClubById(this.clubId)
+      this.topPlayers = await fetchClubTopPlayers(this.club.name);
     },
     openModifyClubDialog() {
       this.showModifyClubDialog = true;

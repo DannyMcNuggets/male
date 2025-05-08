@@ -35,6 +35,24 @@ export async function fetchTopClubs(limit) {
   }
 }
 
+export async function fetchClubTopPlayers(clubName) {
+  try {
+    const response = await apiClient.get(`/clubs/podium/${clubName}`);
+    return mapClubTopPlayersData(response.data);
+  } catch (error) {
+    console.error('Error fetching club top players (podium)', error);
+  }
+}
+
+function mapClubTopPlayersData(rawData) {
+  return rawData.map(player => ({
+    name: player.isik,
+    points: player.punktisumma,
+    date: player.kuupaev,
+  }));
+}
+
+
 export async function removeClub(clubId) {
   try {
     await apiClient.delete(`/clubs/${clubId}`);
@@ -49,6 +67,7 @@ function mapClubsData(rawClubData) {
   });
 }
 
+
 function mapClubData(club) {
   return {
     id: club.id,
@@ -58,3 +77,5 @@ function mapClubData(club) {
     averageRating: club.average_rating == null ? 0 : club.average_rating
   };
 }
+
+

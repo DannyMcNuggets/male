@@ -2,6 +2,21 @@
 
 ---
 
+## ⚠️ NB! ⚠️
+Minu andmebaasi versioonis puudub `asulad` veerg tabelis `klubid`.  
+Seetõttu on muudetud `SELECT_CLUB_BY_ID` päring:
+
+```js
+const SELECT_CLUB_BY_ID = `
+    SELECT k.nimi, k.asukoht, f_klubisuurus($1) AS members, ROUND(AVG(i.ranking), 1) AS average_rating
+    FROM klubid k
+    LEFT JOIN isikud i ON k.id = i.klubis
+    WHERE k.id = $1
+    GROUP BY k.nimi, k.asukoht
+`;
+```
+
+---
 ## Setup
 
 ---

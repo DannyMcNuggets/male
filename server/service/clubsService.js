@@ -1,5 +1,5 @@
 const {pool} = require("../database")
-const {SELECT_ALL_CLUBS, SELECT_CLUB_BY_ID, SELECT_TOP_CLUBS, INSERT_CLUB, getAddOrUpdateClubQuery, DELETE_CLUB} = require("./queries");
+const {SELECT_ALL_CLUBS, SELECT_CLUB_TOP_PLAYERS, SELECT_CLUB_BY_ID, SELECT_TOP_CLUBS, INSERT_CLUB, getAddOrUpdateClubQuery, DELETE_CLUB} = require("./queries");
 
 const getAllClubs = (req, res) => {
     console.log("IN - Get all clubs request")
@@ -96,4 +96,24 @@ const deleteClub = (req, res) => {
     })
 }
 
-module.exports = { getAllClubs, getClubById, addClub, getTopClubs, deleteClub }
+const getClubTopPlayers = (req, res) => {
+    const clubName = req.params.clubName;
+    console.log(`IN - Get top players for club "${clubName}"`);
+
+    pool.query(SELECT_CLUB_TOP_PLAYERS, [clubName], (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send({
+                message: `Error fetching top players for club "${clubName}"`,
+                error: err
+            });
+        }
+
+        console.log(`OUT - Top players: ${JSON.stringify(results.rows)}`);
+        res.status(200).send(results.rows);
+    });
+};
+
+
+
+module.exports = { getAllClubs, getClubById, addClub, getTopClubs, deleteClub, getClubTopPlayers }
