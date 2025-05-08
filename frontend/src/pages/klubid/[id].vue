@@ -53,7 +53,7 @@
           <v-title class="text-center">TOP3 mängijad</v-title>
         </v-col>
 
-        // poodium
+        <!-- poodium -->
         <v-col v-for="(player, index) in topPlayers" :key="index" cols="12" md="4">
           <v-card outlined>
             <v-card-title>{{ player.name }}</v-card-title>
